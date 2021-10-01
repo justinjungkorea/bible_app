@@ -18,12 +18,12 @@ select {
     -moz-appearance: none;
     -webkit-appearance: none;
     appearance: none;
-    width: 80px;
+    width: fit-content;
 
     background-repeat: no-repeat;
     background-size: 0.5em auto;
     background-position: right 0.25em center;
-    padding: .5em .1em .5em .5em;
+    padding: .5em 1em .5em .5em;
     margin-left: 1px;
 
     background-image: url("data:image/svg+xml;charset=utf-8, \
@@ -70,7 +70,7 @@ p {
 
 #menuBox {
     position: fixed;
-    height: 45px;
+    height: 90px;
     width: 100%;
     top: 0;
     left: 0;
@@ -80,9 +80,10 @@ p {
 #wordsBox {
     position: fixed;
     width: 100%;
-    height: calc(100vh - 100px);
+    height: calc(100vh - 135px);
     overflow: auto;
-    top: 50px;
+    top: 90px;
+    bottom: 45px;
     left: 0;
 }
 
