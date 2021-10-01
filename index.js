@@ -11,6 +11,7 @@ let preChapterBtn = document.getElementById('preChapterBtn');
 let nextChapterBtn = document.getElementById('nextChapterBtn');
 let chapterLabel = document.getElementById('chapterLabel');
 let copyAll = document.getElementById('copyAll');
+let loadingBox = document.getElementById('loadingBox');
 
 const resetPage = () => {
   params.set('mv', 'kjv_ko');
@@ -22,6 +23,8 @@ const resetPage = () => {
 
 if(!params.get('mv')){
   resetPage()
+} else {
+  loadingBox.hidden = false
 }
 
 let mainVersion = params.get('mv');
@@ -148,6 +151,7 @@ const getBook = (bookNumber, chapterNumber) => {
             if(Number(chapter) > 1) preChapterBtn.hidden = false;
             if(numberOfChapter !== Number(chapter)) nextChapterBtn.hidden = false;
 
+            loadingBox.hidden = true
             resolve();
           })
       })
