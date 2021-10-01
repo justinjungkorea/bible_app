@@ -38,12 +38,12 @@ button {
     border: 1px solid #fff;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 12pt;
+    font-size: 10pt;
     text-shadow: none;
     width: fit-content;
     height: fit-content;
-    margin: 10px;
-    padding: 4px 8px;
+    margin: 5px;
+    padding: 3px 7px;
 }
 
 button:hover, button:active {
@@ -80,9 +80,9 @@ p {
 #wordsBox {
     position: fixed;
     width: 100%;
-    height: calc(100vh - 135px);
+    height: calc(100vh - 120px);
     overflow: auto;
-    top: 90px;
+    top: 70px;
     bottom: 45px;
     left: 0;
 }
