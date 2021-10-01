@@ -23,8 +23,6 @@ const resetPage = () => {
 
 if(!params.get('mv')){
   resetPage()
-} else {
-  loadingBox.hidden = false
 }
 
 let mainVersion = params.get('mv');
@@ -82,6 +80,7 @@ const getBook = (bookNumber, chapterNumber) => {
       .then(result => {
         result.json()
           .then(async r => {
+            loadingBox.hidden = false
             bookName = r[bookNumber-1].book_name;
             numberOfChapter = r[bookNumber-1].book.length;
             await chapterUpdate();
