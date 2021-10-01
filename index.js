@@ -36,6 +36,40 @@ let mainBook;
 let subBook;
 let numberOfChapter;
 let numberOfVerse;
+let bookName;
+
+let lsId = ('00' + book).slice(-2)+('000' + chapter).slice(-3);
+let isSaved = !!localStorage.getItem(lsId);
+let verseMemo = isSaved ? JSON.parse(localStorage.getItem(lsId)) : {};
+
+//구절 선택 이벤트
+const selectVerse = async id => {
+  //선택된 구절 스타일 변경
+  let selectedVerse = document.getElementById(id);
+  if (selectedVerse.style.color === "black") {
+    selectedVerse.style.color = "#003399";
+    selectedVerse.style.fontWeight = '500';
+    verseMemo[id] = true;
+  } else {
+    selectedVerse.style.color = "black";
+    selectedVerse.style.fontWeight = '400';
+    delete verseMemo[id];
+  }
+
+  localStorage.setItem(lsId, JSON.stringify(verseMemo));
+
+  //선택된 구절 클립보드에 복사
+  let str = '';
+  for(let i=1;i<=numberOfVerse;++i){
+    if(verseMemo[i]){
+      str = str + i + ". " + mainBook[i] + '\n';
+    }
+  }
+
+  str = str + bookName + ' ' + chapter + '장';
+  await navigator.clipboard.writeText(str);
+
+}
 
 const getBook = (bookNumber, chapterNumber) => {
   return new Promise(resolve => {
@@ -43,18 +77,34 @@ const getBook = (bookNumber, chapterNumber) => {
       .then(result => {
         result.json()
           .then(async r => {
+            bookName = r[bookNumber-1].book_name;
             numberOfChapter = r[bookNumber-1].book.length;
             await chapterUpdate();
-            mainBook = r[bookNumber-1].book[chapterNumber-1][chapterNumber];
+            mainBook = JSON.parse(JSON.stringify(r[bookNumber-1].book[chapterNumber-1][chapterNumber]));
             numberOfVerse = Object.keys(mainBook).length;
 
             //대역이 없는 경우
             if(subVersion === 'null') {
               for(let i=1;i<=numberOfVerse;++i){
                 let verseP = document.createElement('p');
-                verseP.id = 'v_' + i;
+                verseP.id = i;
+
+                //메모가 된 경우 반영
+                if(verseMemo[verseP.id]){
+                  verseP.style.color = '#003399';
+                  verseP.style.fontWeight = '500';
+                }
+                else {
+                  verseP.style.color = 'black';
+                  verseP.style.fontWeight = '400';
+                }
+
                 verseP.innerHTML = i + ". " + mainBook[i]
                 wordsBox.appendChild(verseP)
+
+                verseP.onclick = async e => {
+                  await selectVerse(e.target.id);
+                }
               }
             }
             //대역이 있는 경우
@@ -63,13 +113,28 @@ const getBook = (bookNumber, chapterNumber) => {
                 .then(result => {
                   result.json()
                     .then(async r => {
-                      subBook = r[bookNumber - 1].book[chapterNumber - 1][chapterNumber];
+                      subBook = JSON.parse(JSON.stringify(r[bookNumber - 1].book[chapterNumber - 1][chapterNumber]));
 
                       for(let i=1;i<=numberOfVerse;++i){
                         let verseP = document.createElement('p');
-                        verseP.id = 'v_' + i;
+                        verseP.id = i;
+
+                        //메모가 된 경우 반영
+                        if(verseMemo[verseP.id]){
+                          verseP.style.color = '#003399';
+                          verseP.style.fontWeight = '500';
+                        }
+                        else {
+                          verseP.style.color = 'black';
+                          verseP.style.fontWeight = '400';
+                        }
+
                         verseP.innerHTML = i + '. ' + mainBook[i] + '<br/>' + i + '. ' + subBook[i] + '<br/><br/>'
                         wordsBox.appendChild(verseP)
+
+                        verseP.onclick = async e => {
+                          await selectVerse(e.target.id);
+                        }
                       }
 
                     })
