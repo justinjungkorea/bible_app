@@ -70,10 +70,11 @@ p {
 
 #menuBox {
     position: fixed;
-    height: 50px;
+    height: 45px;
     width: 100%;
     top: 0;
     left: 0;
+    text-align: center;
 }
 
 #wordsBox {
@@ -86,7 +87,7 @@ p {
 }
 
 #navigator {
-    height: 50px;
+    height: 45px;
     width: 100%;
     position: fixed;
     bottom: 0;

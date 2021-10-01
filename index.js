@@ -1,6 +1,15 @@
 let url = new URL(location.href)
 let params = (url.searchParams)
 
+let otSelect = document.getElementById('otSelect');
+let ntSelect = document.getElementById('ntSelect');
+let chSelect = document.getElementById('chSelect');
+let mvSelect = document.getElementById('mainVersion');
+let svSelect = document.getElementById('subVersion');
+let wordsBox = document.getElementById('wordsBox');
+let preChapterBtn = document.getElementById('preChapterBtn');
+let nextChapterBtn = document.getElementById('nextChapterBtn');
+
 const resetPage = () => {
   params.set('mv', 'kjv_ko');
   params.set('sv', null);
@@ -18,15 +27,15 @@ let subVersion = params.get('sv');
 let book = params.get('bk');
 let chapter = params.get('ch');
 
+document.getElementById('mv_' + mainVersion).selected = true;
+if(subVersion !== 'null'){
+  document.getElementById('sv_' + subVersion).selected = true;
+}
+
 let mainBook;
 let subBook;
 let numberOfChapter;
 let numberOfVerse;
-
-let otSelect = document.getElementById('otSelect');
-let ntSelect = document.getElementById('ntSelect');
-let chSelect = document.getElementById('chSelect');
-let wordsBox = document.getElementById('wordsBox');
 
 const getBook = (bookNumber, chapterNumber) => {
   return new Promise(resolve => {
@@ -39,12 +48,36 @@ const getBook = (bookNumber, chapterNumber) => {
             mainBook = r[bookNumber-1].book[chapterNumber-1][chapterNumber];
             numberOfVerse = Object.keys(mainBook).length;
 
-            for(let i=1;i<=numberOfVerse;++i){
-              let verseP = document.createElement('p');
-              verseP.id = 'v_' + i;
-              verseP.innerHTML = i + ". " + mainBook[i]
-              wordsBox.appendChild(verseP)
+            //대역이 없는 경우
+            if(subVersion === 'null') {
+              for(let i=1;i<=numberOfVerse;++i){
+                let verseP = document.createElement('p');
+                verseP.id = 'v_' + i;
+                verseP.innerHTML = i + ". " + mainBook[i]
+                wordsBox.appendChild(verseP)
+              }
             }
+            //대역이 있는 경우
+            else {
+              fetch(subVersion + '.json')
+                .then(result => {
+                  result.json()
+                    .then(async r => {
+                      subBook = r[bookNumber - 1].book[chapterNumber - 1][chapterNumber];
+
+                      for(let i=1;i<=numberOfVerse;++i){
+                        let verseP = document.createElement('p');
+                        verseP.id = 'v_' + i;
+                        verseP.innerHTML = i + '. ' + mainBook[i] + '<br/>' + i + '. ' + subBook[i] + '<br/><br/>'
+                        wordsBox.appendChild(verseP)
+                      }
+
+                    })
+                })
+            }
+
+            if(Number(chapter) > 1) preChapterBtn.hidden = false;
+            if(numberOfChapter !== Number(chapter)) nextChapterBtn.hidden = false;
 
             resolve();
           })
@@ -125,7 +158,32 @@ ntSelect.addEventListener('change', e => {
   window.location.href = url;
 })
 
+//장 선택시
 chSelect.addEventListener('change', e => {
   params.set('ch', e.target.value);
+  window.location.href = url;
+})
+
+//번역 선택 시
+mvSelect.addEventListener('change', e => {
+  params.set('mv', e.target.value);
+  window.location.href = url;
+})
+
+//대역 선택 시
+svSelect.addEventListener('change', e => {
+  params.set('sv', e.target.value);
+  window.location.href = url;
+})
+
+//이전 장으로 이동
+preChapterBtn.addEventListener('click', () => {
+  params.set('ch', (Number(chapter)-1).toString());
+  window.location.href = url;
+})
+
+//다음 장으로 이동
+nextChapterBtn.addEventListener('click', () => {
+  params.set('ch', (Number(chapter)+1).toString());
   window.location.href = url;
 })
