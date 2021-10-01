@@ -1,0 +1,108 @@
+@import url(https://fonts.googleapis.com/earlyaccess/notosanskr.css);
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+select {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+    width: 80px;
+
+    background-repeat: no-repeat;
+    background-size: 0.5em auto;
+    background-position: right 0.25em center;
+    padding: .5em .1em .5em .5em;
+    margin-left: 1px;
+
+    background-image: url("data:image/svg+xml;charset=utf-8, \
+    <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 40'> \
+      <polygon points='0,0 60,0 30,40' style='fill:black;'/> \
+    </svg>");
+}
+
+button {
+    background: #196b94;
+    color: #fff;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12pt;
+    text-shadow: none;
+    width: fit-content;
+    height: fit-content;
+    margin: 10px;
+    padding: 4px 8px;
+}
+
+button:hover, button:active {
+    background: #016abc;
+    color: #fff;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    text-shadow: none;
+}
+
+a {
+    color:white;
+    text-decoration: none;
+}
+
+p {
+    margin: .1em 0 0 .5em;
+    font-weight: 400;
+}
+
+.defaultLabel {
+    font-weight: 500;
+}
+
+#menuBox {
+    position: fixed;
+    height: 50px;
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+
+#wordsBox {
+    position: fixed;
+    width: 100%;
+    height: calc(100vh - 100px);
+    overflow: auto;
+    top: 50px;
+    left: 0;
+}
+
+#navigator {
+    height: 50px;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}
+
+#preChapterBtn {
+    position: fixed;
+    left: 0;
+}
+
+#nextChapterBtn {
+    position: fixed;
+    right: 0;
+}
+
+#chSelect {
+    width: 60px;
+}

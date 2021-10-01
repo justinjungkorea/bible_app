@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>바이블 앱</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#000000">
+    <meta property="og:title" content="성경 앱"/>
+    <meta property="og:url" content="https://justinjungkorea.github.io/bible_app/"/>
+    <meta property="og:description" content="모든 성경 기록은 하나님의 영감으로 주신 것으로 교리와 책망과 바로잡음과 의로 교육하기에 유익합니다."/>
+    <meta property="og:image" content="https://justinjungkorea.github.io/bible_app/thumbnail.jpeg"/>
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="bible.png" type="image/x-icon">
+</head>
+<body>
+<div id="menuBox">
+    <label for="otSelect" class="defaultLabel">성경</label>
+    <select name='otSelect' id="otSelect">
+        <option value="ot" id="otDefault" selected>구약</option>
+    </select>
+
+    <select name='ntSelect' id="ntSelect">
+        <option value="nt" id="ntDefault" selected>신약</option>
+    </select>
+
+    <select name='chSelect' id="chSelect">
+    </select>
+    <label class="defaultLabel">장</label>
+
+    <select name='mainVersion' id='mainVersion'>
+        <option value='kjv_ko' selected>흠정역</option>
+        <option value='krv'>개역한글</option>
+        <option value='kjv'>KJV</option>
+    </select>
+
+<!--    <select name='subVersion' id='subVersion'>-->
+<!--        <option value='none' selected>대역</option>-->
+<!--        <option value='kjv_ko' >흠정역</option>-->
+<!--        <option value='krv'>개역한글</option>-->
+<!--        <option value='kjv' >KJV</option>-->
+<!--    </select>-->
+<!--    <button id="copyAll">전체 복사</button>-->
+<!--    <label id="notyLabel"></label>-->
+</div>
+<div id="wordsBox">
+
+</div>
+<div id="navigator">
+    <button id="preChapterBtn">이전장</button>
+    <button id="nextChapterBtn">다음장</button>
+</div>
+<script type="text/javascript" src="index.js"></script>
+</body>
+</html>
