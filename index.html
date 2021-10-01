@@ -25,9 +25,9 @@
         <option value="nt" id="ntDefault" selected>신약</option>
     </select>
 
-    <select name='chSelect' id="chSelect">
+    <select name='chSelect' id="chSelect" hidden>
     </select>
-    <label class="defaultLabel">장</label>
+    <label class="defaultLabel" id="chapterLabel" hidden>장</label>
 
     <select name='mainVersion' id='mainVersion'>
         <option value='kjv_ko' id="mv_kjv_ko" selected>흠정역</option>
@@ -41,7 +41,7 @@
         <option value='ko_ko' id="sv_ko_ko">개역한글</option>
         <option value='kjv' id="sv_kjv">KJV</option>
     </select>
-<!--    <button id="copyAll">전체 복사</button>-->
+    <button id="copyAll">전체 복사</button>
 <!--    <label id="notyLabel"></label>-->
 </div>
 <div id="wordsBox">

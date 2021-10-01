@@ -9,6 +9,8 @@ let svSelect = document.getElementById('subVersion');
 let wordsBox = document.getElementById('wordsBox');
 let preChapterBtn = document.getElementById('preChapterBtn');
 let nextChapterBtn = document.getElementById('nextChapterBtn');
+let chapterLabel = document.getElementById('chapterLabel');
+let copyAll = document.getElementById('copyAll');
 
 const resetPage = () => {
   params.set('mv', 'kjv_ko');
@@ -140,6 +142,8 @@ const getBook = (bookNumber, chapterNumber) => {
                     })
                 })
             }
+            chSelect.hidden = false;
+            chapterLabel.hidden = false;
 
             if(Number(chapter) > 1) preChapterBtn.hidden = false;
             if(numberOfChapter !== Number(chapter)) nextChapterBtn.hidden = false;
@@ -251,4 +255,14 @@ preChapterBtn.addEventListener('click', () => {
 nextChapterBtn.addEventListener('click', () => {
   params.set('ch', (Number(chapter)+1).toString());
   window.location.href = url;
+})
+
+//전체 복사
+copyAll.addEventListener('click', async () => {
+  let str = bookName + ' ' + chapter + '장' + '\n';
+  for(let i=1;i<=numberOfVerse;++i){
+    str = str + i + ". " + mainBook[i] + '\n';
+  }
+  await navigator.clipboard.writeText(str);
+  alert('done')
 })
