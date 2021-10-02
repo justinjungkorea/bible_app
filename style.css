@@ -83,7 +83,7 @@ p {
 #wordsBox {
     position: fixed;
     width: 100%;
-    height: calc(100vh - 78px);
+    height: calc(100vh - 80px);
     overflow: auto;
     top: 50px;
     bottom: 35px;
@@ -94,7 +94,7 @@ p {
     height: 35px;
     width: 100%;
     position: fixed;
-    bottom: 0;
+    bottom: 2px;
     left: 0;
 }
 
