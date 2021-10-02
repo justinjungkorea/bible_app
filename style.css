@@ -71,26 +71,27 @@ p {
 
 #menuBox {
     position: fixed;
-    height: 90px;
+    height: 33px;
     width: 100%;
     top: 0;
     left: 0;
     padding-left: 10px;
-    text-align: left;
+    padding-top: 10px;
+    justify-content: left;
 }
 
 #wordsBox {
     position: fixed;
     width: 100%;
-    height: calc(100vh - 120px);
+    height: calc(100vh - 78px);
     overflow: auto;
-    top: 70px;
-    bottom: 45px;
+    top: 50px;
+    bottom: 35px;
     left: 0;
 }
 
 #navigator {
-    height: 45px;
+    height: 35px;
     width: 100%;
     position: fixed;
     bottom: 0;
@@ -108,5 +109,11 @@ p {
 }
 
 #chSelect {
-    width: 60px;
+    width: 50px;
 }
+
+#subVersion {
+    position: fixed;
+    right: 10px;
+}
+

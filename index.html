@@ -17,32 +17,24 @@
 </head>
 <body>
 <div id="menuBox">
-    <select name='otSelect' id="otSelect">
+    <select name='bookSelect' id="bookSelect">
         <option value="ot" id="otDefault" selected>구약</option>
-    </select>
-
-    <select name='ntSelect' id="ntSelect">
-        <option value="nt" id="ntDefault" selected>신약</option>
     </select>
 
     <select name='chSelect' id="chSelect" hidden>
     </select>
     <label class="defaultLabel" id="chapterLabel" hidden>장</label>
-    <br/>
     <select name='mainVersion' id='mainVersion'>
         <option value='kjv_ko' id="mv_kjv_ko" selected>흠정역</option>
         <option value='ko_ko' id="mv_ko_ko">개역한글</option>
         <option value='kjv' id="mv_kjv">KJV</option>
     </select>
-
     <select name='subVersion' id='subVersion'>
         <option value='none' id="sv_none" selected>대역</option>
         <option value='kjv_ko' id="sv_kjv_ko">흠정역</option>
         <option value='ko_ko' id="sv_ko_ko">개역한글</option>
         <option value='kjv' id="sv_kjv">KJV</option>
     </select>
-    <button id="copyAll">복사</button>
-<!--    <label id="notyLabel"></label>-->
 </div>
 <div id="wordsBox">
 

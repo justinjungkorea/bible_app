@@ -1,7 +1,7 @@
 let url = new URL(location.href)
 let params = (url.searchParams)
 
-let otSelect = document.getElementById('otSelect');
+let bookSelect = document.getElementById('bookSelect');
 let ntSelect = document.getElementById('ntSelect');
 let chSelect = document.getElementById('chSelect');
 let mvSelect = document.getElementById('mainVersion');
@@ -146,6 +146,7 @@ const getBook = (bookNumber, chapterNumber) => {
             }
             chSelect.hidden = false;
             chapterLabel.hidden = false;
+            // copyAll.hidden = false;
 
             if(Number(chapter) > 1) preChapterBtn.hidden = false;
             if(numberOfChapter !== Number(chapter)) nextChapterBtn.hidden = false;
@@ -189,17 +190,12 @@ fetch('book_info.json')
         await getBook(book, chapter)
       }
 
-      if(bookName < 40){
-        otSelect.appendChild(elem_option)
-      }
-      else {
-        ntSelect.appendChild(elem_option)
-      }
+      bookSelect.appendChild(elem_option)
     }
   })
 
-//구약 선택시
-otSelect.addEventListener('change', e => {
+//책 선택
+bookSelect.addEventListener('change', e => {
   //초기화
   if(e.target.value === 'ot') {
     resetPage();
@@ -207,24 +203,6 @@ otSelect.addEventListener('change', e => {
   }
 
   book = e.target.value;
-  let ntOption = document.getElementById('ntDefault');
-  ntOption.selected = true;
-  params.set('bk', book);
-  params.set('ch', '1');
-  window.location.href = url;
-})
-
-//신약 선택시
-ntSelect.addEventListener('change', e => {
-  //초기화
-  if(e.target.value === 'nt') {
-    resetPage();
-    return;
-  }
-
-  book = e.target.value;
-  let otOption = document.getElementById('otDefault');
-  otOption.selected = true;
   params.set('bk', book);
   params.set('ch', '1');
   window.location.href = url;
