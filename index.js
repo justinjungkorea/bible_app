@@ -2,7 +2,6 @@ let url = new URL(location.href)
 let params = (url.searchParams)
 
 let bookSelect = document.getElementById('bookSelect');
-let ntSelect = document.getElementById('ntSelect');
 let chSelect = document.getElementById('chSelect');
 let mvSelect = document.getElementById('mainVersion');
 let svSelect = document.getElementById('subVersion');
@@ -10,7 +9,7 @@ let wordsBox = document.getElementById('wordsBox');
 let preChapterBtn = document.getElementById('preChapterBtn');
 let nextChapterBtn = document.getElementById('nextChapterBtn');
 let chapterLabel = document.getElementById('chapterLabel');
-let copyAll = document.getElementById('copyAll');
+// let copyAll = document.getElementById('copyAll');
 let loadingBox = document.getElementById('loadingBox');
 
 const resetPage = () => {
@@ -238,12 +237,12 @@ nextChapterBtn.addEventListener('click', () => {
   window.location.href = url;
 })
 
-//전체 복사
-copyAll.addEventListener('click', async () => {
-  let str = bookName + ' ' + chapter + '장' + '\n';
-  for(let i=1;i<=numberOfVerse;++i){
-    str = str + i + ". " + mainBook[i] + '\n';
-  }
-  await navigator.clipboard.writeText(str);
-  alert('done')
-})
+// //전체 복사
+// copyAll.addEventListener('click', async () => {
+//   let str = bookName + ' ' + chapter + '장' + '\n';
+//   for(let i=1;i<=numberOfVerse;++i){
+//     str = str + i + ". " + mainBook[i] + '\n';
+//   }
+//   await navigator.clipboard.writeText(str);
+//   alert('done')
+// })
