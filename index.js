@@ -79,7 +79,6 @@ const getBook = (bookNumber, chapterNumber) => {
       .then(result => {
         result.json()
           .then(async r => {
-            loadingBox.hidden = false
             bookName = r[bookNumber-1].book_name;
             numberOfChapter = r[bookNumber-1].book.length;
             await chapterUpdate();
@@ -150,7 +149,6 @@ const getBook = (bookNumber, chapterNumber) => {
             if(Number(chapter) > 1) preChapterBtn.hidden = false;
             if(numberOfChapter !== Number(chapter)) nextChapterBtn.hidden = false;
 
-            loadingBox.hidden = true
             resolve();
           })
       })
@@ -177,6 +175,7 @@ const chapterUpdate = () => {
 fetch('book_info.json')
   .then(result => { return result.json() })
   .then(async data => {
+    loadingBox.hidden = false
     for(let bookName in data){
       let elem_option = document.createElement('option');
       elem_option.id = 'bk_' + bookName;
@@ -191,6 +190,7 @@ fetch('book_info.json')
 
       bookSelect.appendChild(elem_option)
     }
+    loadingBox.hidden = true
   })
 
 //책 선택
