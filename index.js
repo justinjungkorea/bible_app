@@ -191,6 +191,7 @@ fetch('book_info.json')
       bookSelect.appendChild(elem_option)
     }
     loadingBox.hidden = true
+    wordsBox.focus()
   })
 
 //책 선택
