@@ -61,7 +61,7 @@ a {
 }
 
 p {
-    margin: .1em 0 0 .5em;
+    margin: .1em 1em 0 1em;
     font-weight: 400;
 }
 
@@ -71,7 +71,7 @@ p {
 
 #menuBox {
     position: fixed;
-    height: 33px;
+    height: 40px;
     width: 100%;
     top: 0;
     left: 0;
@@ -83,11 +83,10 @@ p {
 #wordsBox {
     position: fixed;
     width: 100%;
-    height: calc(100vh - 98px);
+    height: calc(100vh - 105px);
     overflow: auto;
     top: 50px;
     bottom: 35px;
-    left: 0;
 }
 
 #navigator {
@@ -100,12 +99,12 @@ p {
 
 #preChapterBtn {
     position: fixed;
-    left: 0;
+    left: 10px;
 }
 
 #nextChapterBtn {
     position: fixed;
-    right: 0;
+    right: 10px;
 }
 
 #chSelect {
