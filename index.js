@@ -11,6 +11,7 @@ let nextChapterBtn = document.getElementById('nextChapterBtn');
 let chapterLabel = document.getElementById('chapterLabel');
 // let copyAll = document.getElementById('copyAll');
 let loadingBox = document.getElementById('loadingBox');
+let mainPage = document.getElementById('mainPage');
 
 const resetPage = () => {
   params.set('mv', 'kjv_ko');
@@ -176,6 +177,7 @@ fetch('book_info.json')
   .then(result => { return result.json() })
   .then(async data => {
     loadingBox.hidden = false
+    mainPage.hidden = true
     for(let bookName in data){
       let elem_option = document.createElement('option');
       elem_option.id = 'bk_' + bookName;
@@ -191,13 +193,14 @@ fetch('book_info.json')
       bookSelect.appendChild(elem_option)
     }
     loadingBox.hidden = true
+    mainPage.hidden = false
     wordsBox.focus()
   })
 
 //책 선택
 bookSelect.addEventListener('change', e => {
   //초기화
-  if(e.target.value === 'ot') {
+  if(e.target.value === 'book') {
     resetPage();
     return;
   }

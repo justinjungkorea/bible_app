@@ -16,33 +16,38 @@
     <link rel="icon" href="https://justinjungkorea.github.io/bible_app/bible.png" type="image/x-icon">
 </head>
 <body>
-<div id="menuBox">
-    <select name='bookSelect' id="bookSelect">
-        <option value="ot" id="otDefault" selected>구약</option>
-    </select>
-
-    <select name='chSelect' id="chSelect" hidden>
-    </select>
-    <label class="defaultLabel" id="chapterLabel" hidden>장</label>
-    <select name='mainVersion' id='mainVersion'>
-        <option value='kjv_ko' id="mv_kjv_ko" selected>흠정역</option>
-        <option value='ko_ko' id="mv_ko_ko">개역한글</option>
-        <option value='kjv' id="mv_kjv">KJV</option>
-    </select>
-    <select name='subVersion' id='subVersion'>
-        <option value='null' id="sv_none" selected>대역</option>
-        <option value='kjv_ko' id="sv_kjv_ko">흠정역</option>
-        <option value='ko_ko' id="sv_ko_ko">개역한글</option>
-        <option value='kjv' id="sv_kjv">KJV</option>
-    </select>
+<div class="loader" id="loadingBox" hidden>
+    <div class="loader-wheel"></div>
+    <div class="loader-text"></div>
 </div>
-<div id="wordsBox">
+<div id="mainPage">
+    <div id="menuBox">
+        <select name='bookSelect' id="bookSelect">
+            <option value="book" id="bookDefault" selected>성경</option>
+        </select>
 
-</div>
-<div id="navigator">
-    <button id="preChapterBtn" hidden>이전장</button>
-    <p id="loadingBox" hidden>Loading...</p>
-    <button id="nextChapterBtn" hidden>다음장</button>
+        <select name='chSelect' id="chSelect" hidden>
+        </select>
+        <label class="defaultLabel" id="chapterLabel" hidden>장</label>
+        <select name='mainVersion' id='mainVersion'>
+            <option value='kjv_ko' id="mv_kjv_ko" selected>흠정역</option>
+            <option value='ko_ko' id="mv_ko_ko">개역한글</option>
+            <option value='kjv' id="mv_kjv">KJV</option>
+        </select>
+        <select name='subVersion' id='subVersion'>
+            <option value='null' id="sv_none" selected>대역</option>
+            <option value='kjv_ko' id="sv_kjv_ko">흠정역</option>
+            <option value='ko_ko' id="sv_ko_ko">개역한글</option>
+            <option value='kjv' id="sv_kjv">KJV</option>
+        </select>
+    </div>
+    <div id="wordsBox">
+
+    </div>
+    <div id="navigator">
+        <button id="preChapterBtn" hidden>이전장</button>
+        <button id="nextChapterBtn" hidden>다음장</button>
+    </div>
 </div>
 <script type="text/javascript" src="index.js"></script>
 </body>
