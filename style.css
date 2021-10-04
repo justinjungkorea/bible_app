@@ -83,7 +83,7 @@ p {
 #wordsBox {
     position: fixed;
     width: 100%;
-    height: calc(100vh - 80px);
+    height: calc(100vh - 98px);
     overflow: auto;
     top: 50px;
     bottom: 35px;
@@ -94,7 +94,7 @@ p {
     height: 35px;
     width: 100%;
     position: fixed;
-    bottom: 2px;
+    bottom: 20px;
     left: 0;
 }
 
@@ -117,8 +117,18 @@ p {
     right: 10px;
 }
 
+#loadingBox {
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+}
+
 .loader {
-    width: 60px;
+    width: 150px;
+    padding: 50px;
 }
 
 .loader-wheel {
@@ -126,14 +136,16 @@ p {
     border: 2px solid rgba(30, 30, 30, 0.5);
     border-left: 4px solid #fff;
     border-radius: 50%;
-    height: 50px;
+    height: 200px;
     margin-bottom: 10px;
-    width: 50px;
+    width: 200px;
+    align-self: center;
 }
 
 .loader-text {
-    color: #fff;
-    font-family: arial, sans-serif;
+    color: black;
+    font-weight: bold;
+    text-align: center;
 }
 
 .loader-text:after {

@@ -176,8 +176,8 @@ const chapterUpdate = () => {
 fetch('book_info.json')
   .then(result => { return result.json() })
   .then(async data => {
-    loadingBox.hidden = false
-    mainPage.hidden = true
+    loadingBox.style.display = 'block'
+    mainPage.style.display = 'none'
     for(let bookName in data){
       let elem_option = document.createElement('option');
       elem_option.id = 'bk_' + bookName;
@@ -192,8 +192,8 @@ fetch('book_info.json')
 
       bookSelect.appendChild(elem_option)
     }
-    loadingBox.hidden = true
-    mainPage.hidden = false
+    loadingBox.style.display = 'none'
+    mainPage.style.display = 'block'
     wordsBox.focus()
   })
 
