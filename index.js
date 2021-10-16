@@ -145,6 +145,7 @@ const getBook = (bookNumber, chapterNumber) => {
             }
             chSelect.hidden = false;
             chapterLabel.hidden = false;
+            chapterLabel.innerText = bookNumber === '19' ? '편':'장'
             // copyAll.hidden = false;
 
             if(Number(chapter) > 1) preChapterBtn.hidden = false;
