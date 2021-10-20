@@ -94,22 +94,24 @@ const getBook = (bookNumber, chapterNumber) => {
             if(subVersion === 'null') {
               for(let i=1;i<=numberOfVerse;++i){
                 let verseP = document.createElement('p');
-                verseP.id = i;
+                let verseSpan = document.createElement('span');
+                verseSpan.id = i;
 
                 //메모가 된 경우 반영
-                if(verseMemo[verseP.id]){
-                  verseP.style.backgroundColor = '#FAFAD2'
-                  verseP.style.color = 'black';
+                if(verseMemo[verseSpan.id]){
+                  verseSpan.style.backgroundColor = '#FAFAD2'
+                  verseSpan.style.color = 'black';
                 }
                 else {
-                  verseP.style.color = 'black';
-                  verseP.style.fontWeight = '400';
+                  verseSpan.style.color = 'black';
+                  verseSpan.style.fontWeight = '400';
                 }
 
-                verseP.innerHTML = i + ". " + mainBook[i]
+                verseSpan.innerHTML = i + ". " + mainBook[i]
+                verseP.appendChild(verseSpan)
                 wordsBox.appendChild(verseP)
 
-                verseP.onclick = async e => {
+                verseSpan.onclick = async e => {
                   await selectVerse(e.target.id);
                 }
               }
@@ -124,22 +126,24 @@ const getBook = (bookNumber, chapterNumber) => {
 
                       for(let i=1;i<=numberOfVerse;++i){
                         let verseP = document.createElement('p');
-                        verseP.id = i;
+                        let verseSpan = document.createElement('span');
+                        verseSpan.id = i;
 
                         //메모가 된 경우 반영
-                        if(verseMemo[verseP.id]){
-                          verseP.style.color = '#003399';
-                          verseP.style.fontWeight = '500';
+                        if(verseMemo[verseSpan.id]){
+                          verseSpan.style.backgroundColor = '#FAFAD2'
+                          verseSpan.style.color = 'black';
                         }
                         else {
-                          verseP.style.color = 'black';
-                          verseP.style.fontWeight = '400';
+                          verseSpan.style.color = 'black';
+                          verseSpan.style.fontWeight = '400';
                         }
 
-                        verseP.innerHTML = i + '. ' + mainBook[i] + '<br/>' + i + '. ' + subBook[i] + '<br/><br/>'
+                        verseSpan.innerHTML = i + '. ' + mainBook[i] + '<br/>' + i + '. ' + subBook[i] + '<br/><br/>'
+                        verseP.appendChild(verseSpan);
                         wordsBox.appendChild(verseP)
 
-                        verseP.onclick = async e => {
+                        verseSpan.onclick = async e => {
                           await selectVerse(e.target.id);
                         }
                       }
