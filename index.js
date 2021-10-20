@@ -44,6 +44,7 @@ let bookName;
 let lsId = ('00' + book).slice(-2)+('000' + chapter).slice(-3);
 let isSaved = !!localStorage.getItem(lsId);
 let verseMemo = isSaved ? JSON.parse(localStorage.getItem(lsId)) : {};
+let verseCopy = {};
 
 //구절 선택 이벤트
 const selectVerse = async id => {
@@ -53,10 +54,13 @@ const selectVerse = async id => {
     selectedVerse.style.color = "#003399";
     selectedVerse.style.fontWeight = '500';
     verseMemo[id] = true;
+    verseCopy[id] = true;
   } else {
     selectedVerse.style.color = "black";
     selectedVerse.style.fontWeight = '400';
+    selectedVerse.style.backgroundColor = 'transparent';
     delete verseMemo[id];
+    delete verseCopy[id];
   }
 
   localStorage.setItem(lsId, JSON.stringify(verseMemo));
@@ -64,7 +68,7 @@ const selectVerse = async id => {
   //선택된 구절 클립보드에 복사
   let str = '';
   for(let i=1;i<=numberOfVerse;++i){
-    if(verseMemo[i]){
+    if(verseCopy[i]){
       str = str + i + ". " + mainBook[i] + '\n';
     }
   }
@@ -94,8 +98,8 @@ const getBook = (bookNumber, chapterNumber) => {
 
                 //메모가 된 경우 반영
                 if(verseMemo[verseP.id]){
-                  verseP.style.color = '#003399';
-                  verseP.style.fontWeight = '500';
+                  verseP.style.backgroundColor = '#FAFAD2'
+                  verseP.style.color = 'black';
                 }
                 else {
                   verseP.style.color = 'black';
