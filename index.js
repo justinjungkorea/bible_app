@@ -250,6 +250,9 @@ nextChapterBtn.addEventListener('click', () => {
   window.location.href = url;
 })
 
+//스크롤 위치
+history.scrollRestoration = "auto";
+
 // //전체 복사
 // copyAll.addEventListener('click', async () => {
 //   let str = bookName + ' ' + chapter + '장' + '\n';
