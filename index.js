@@ -13,6 +13,8 @@ let chapterLabel = document.getElementById('chapterLabel');
 let loadingBox = document.getElementById('loadingBox');
 let mainPage = document.getElementById('mainPage');
 
+let pageLoaded = false;
+
 const resetPage = () => {
   params.set('mv', 'kjv_ko');
   params.set('sv', null);
@@ -158,6 +160,7 @@ const getBook = (bookNumber, chapterNumber) => {
 
             if(Number(chapter) > 1) preChapterBtn.hidden = false;
             if(numberOfChapter !== Number(chapter)) nextChapterBtn.hidden = false;
+            pageLoaded = true;
 
             resolve();
           })
@@ -212,12 +215,12 @@ document.addEventListener('keyup', e => {
 
   //이전 장으로 이동
   if(keyName === 'ArrowLeft'){
-    if(Number(chapter)<=1)  return;
+    if(Number(chapter)<=1 && !pageLoaded)  return;
     params.set('ch', (Number(chapter)-1).toString());
     window.location.href = url;
   }
   else if(keyName === 'ArrowRight'){
-    if(numberOfChapter === Number(chapter)) return;
+    if(numberOfChapter === Number(chapter) && !pageLoaded) return;
     params.set('ch', (Number(chapter)+1).toString());
     window.location.href = url;
   }
