@@ -206,6 +206,23 @@ fetch('book_info.json')
     wordsBox.focus()
   })
 
+//키보드 이벤트
+document.addEventListener('keyup', e => {
+  const keyName = e.key;
+
+  //이전 장으로 이동
+  if(keyName === 'ArrowLeft'){
+    if(Number(chapter)<=1)  return;
+    params.set('ch', (Number(chapter)-1).toString());
+    window.location.href = url;
+  }
+  else if(keyName === 'ArrowRight'){
+    if(numberOfChapter === Number(chapter)) return;
+    params.set('ch', (Number(chapter)+1).toString());
+    window.location.href = url;
+  }
+})
+
 //책 선택
 bookSelect.addEventListener('change', e => {
   //초기화
