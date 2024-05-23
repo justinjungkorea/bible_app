@@ -221,9 +221,10 @@ document.addEventListener('keyup', e => {
     window.location.href = url;
   }
   else if(keyName === 'ArrowRight'){
+    console.log(`numberOfChapter: ${numberOfChapter} / chapter: ${chapter} / ${pageLoaded}`);
     if(numberOfChapter === Number(chapter+1) && !pageLoaded) return;
-    params.set('ch', (Number(chapter)+1).toString());
-    window.location.href = url;
+    // params.set('ch', (Number(chapter)+1).toString());
+    // window.location.href = url;
   }
 })
 
