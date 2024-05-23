@@ -222,13 +222,15 @@ document.addEventListener('keyup', e => {
   console.log('keyup : ', keyName);
   //이전 장으로 이동
   if(keyName === 'ArrowLeft' && !pushedShiftKey){
+    console.log(`${numberOfChapter} / ${chapter} / ${pushedShiftKey}`);
     if(Number(chapter)<=1 || !pageLoaded)  return;
     params.set('ch', (Number(chapter)-1).toString());
     window.location.href = url;
   }
   //다음 장으로 이동
   else if(keyName === 'ArrowRight' && !pushedShiftKey){
-    if(numberOfChapter === Number(chapter+1)|| !pageLoaded) return;
+    console.log(`${numberOfChapter} / ${chapter} / ${pushedShiftKey}`);
+    if(numberOfChapter === Number(chapter+1) || !pageLoaded) return;
     params.set('ch', (Number(chapter)+1).toString());
     window.location.href = url;
   }
