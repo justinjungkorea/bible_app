@@ -212,13 +212,14 @@ fetch('book_info.json')
 
 document.addEventListener('keydown', e => {
   const keyName = e.key;
+  console.log('keydown : ', keyName);
   if(keyName == 'Shift')  pushedShiftKey = true;
 })
 
 //키보드 이벤트
 document.addEventListener('keyup', e => {
   const keyName = e.key;
-
+  console.log('keyup : ', keyName);
   //이전 장으로 이동
   if(keyName === 'ArrowLeft' && !pushedShiftKey){
     if(Number(chapter)<=1 || !pageLoaded)  return;
@@ -248,6 +249,12 @@ document.addEventListener('keyup', e => {
   else if(keyName === 'Shift'){
     pushedShiftKey = false;
   }
+})
+
+document.addEventListener('keypress', e => {
+  const keyName = e.key;
+  console.log('keypress : ', keyName);
+  
 })
 
 //책 선택
