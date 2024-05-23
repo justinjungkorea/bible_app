@@ -219,7 +219,7 @@ document.addEventListener('keydown', e => {
 //키보드 이벤트
 document.addEventListener('keyup', e => {
   const keyName = e.key;
-
+  console.log('keyname : ', keyName);
   //이전 장으로 이동
   if(keyName === 'ArrowLeft' && !pushedShiftKey){
     if(Number(chapter)<=1 || !pageLoaded)  return;
