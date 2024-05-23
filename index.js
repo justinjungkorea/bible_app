@@ -212,7 +212,7 @@ fetch('book_info.json')
 
 document.addEventListener('keydown', e => {
   const keyName = e.key;
-  
+
   if(keyName == 'Shift')  pushedShiftKey = true;
 })
 
@@ -244,6 +244,25 @@ document.addEventListener('keyup', e => {
     if(book == 66 || !pageLoaded) return;
     params.set('bk', (Number(book)+1).toString());
     params.set('ch', '1');
+    window.location.href = url;
+  }
+  //구약으로 이동
+  else if(keyName === 'o' && pushedShiftKey){
+    params.set('bk', 1);
+    params.set('ch', '1');
+    window.location.href = url;
+  }
+  //신약으로 이동
+  else if(keyName === 'n' && pushedShiftKey){
+    params.set('bk', 40);
+    params.set('ch', '1');
+    window.location.href = url;
+  }
+  //장 이동
+  else if(keyName === 'g' && pushedShiftKey){
+    let request = prompt("입력한 장으로 이동");
+    if(Number(request)<1 && Number(request)>numberOfChapter)  return;
+    params.set('ch', request);
     window.location.href = url;
   }
   else if(keyName === 'Shift'){
