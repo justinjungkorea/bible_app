@@ -14,6 +14,7 @@ let loadingBox = document.getElementById('loadingBox');
 let mainPage = document.getElementById('mainPage');
 
 let pageLoaded = false;
+let pushedShiftKey = false;
 
 const resetPage = () => {
   params.set('mv', 'kjv_ko');
@@ -209,22 +210,43 @@ fetch('book_info.json')
     wordsBox.focus()
   })
 
+document.addEventListener('keydown', e => {
+  const keyName = e.key;
+  if(keyName == 'Shift')  pushedShiftKey = true;
+})
+
 //키보드 이벤트
 document.addEventListener('keyup', e => {
   const keyName = e.key;
-  console.log('key : ', keyName);
 
   //이전 장으로 이동
-  if(keyName === 'ArrowLeft'){
-    if(Number(chapter)<=1 && !pageLoaded)  return;
+  if(keyName === 'ArrowLeft' && !pushedShiftKey){
+    if(Number(chapter)<=1 || !pageLoaded)  return;
     params.set('ch', (Number(chapter)-1).toString());
     window.location.href = url;
   }
-  else if(keyName === 'ArrowRight'){
-    console.log(`numberOfChapter: ${numberOfChapter} / chapter: ${chapter} / ${pageLoaded}`);
-    if(numberOfChapter === Number(chapter+1) && !pageLoaded) return;
-    // params.set('ch', (Number(chapter)+1).toString());
-    // window.location.href = url;
+  //다음 장으로 이동
+  else if(keyName === 'ArrowRight' && !pushedShiftKey){
+    if(numberOfChapter === Number(chapter+1)|| !pageLoaded) return;
+    params.set('ch', (Number(chapter)+1).toString());
+    window.location.href = url;
+  }
+  //이전 책으로 이동
+  else if(keyName === 'ArrowLeft' && pushedShiftKey){
+    if(book == 1 || !pageLoaded) return;
+    params.set('bk', (Number(book)-1).toString());
+    params.set('ch', '1');
+    window.location.href = url;
+  }
+  //다음 책으로 이동
+  else if(keyName === 'ArrowRight' && pushedShiftKey){
+    if(book == 66 || !pageLoaded) return;
+    params.set('bk', (Number(book)+1).toString());
+    params.set('ch', '1');
+    window.location.href = url;
+  }
+  else if(keyName === 'Shift'){
+    pushedShiftKey = false;
   }
 })
 
