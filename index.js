@@ -223,16 +223,16 @@ document.addEventListener('keyup', e => {
   //이전 장으로 이동
   if(keyName === 'ArrowLeft' && !pushedShiftKey){
     console.log(`${numberOfChapter} / ${chapter} / ${pushedShiftKey}`);
-    if(Number(chapter)<=1 || !pageLoaded)  return;
-    params.set('ch', (Number(chapter)-1).toString());
-    window.location.href = url;
+    // if(Number(chapter)<=1 || !pageLoaded)  return;
+    // params.set('ch', (Number(chapter)-1).toString());
+    // window.location.href = url;
   }
   //다음 장으로 이동
   else if(keyName === 'ArrowRight' && !pushedShiftKey){
     console.log(`${numberOfChapter} / ${chapter} / ${pushedShiftKey}`);
-    if(numberOfChapter === Number(chapter+1) || !pageLoaded) return;
-    params.set('ch', (Number(chapter)+1).toString());
-    window.location.href = url;
+    // if(numberOfChapter === Number(chapter+1) || !pageLoaded) return;
+    // params.set('ch', (Number(chapter)+1).toString());
+    // window.location.href = url;
   }
   //이전 책으로 이동
   else if(keyName === 'ArrowLeft' && pushedShiftKey){
