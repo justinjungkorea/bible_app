@@ -220,6 +220,8 @@ document.addEventListener('keyup', e => {
     window.location.href = url;
   }
   else if(keyName === 'ArrowRight'){
+    console.log('number : ', numberOfChapter);
+    console.log('chapter : ', chapter);
     if(numberOfChapter === Number(chapter) && !pageLoaded) return;
     params.set('ch', (Number(chapter)+1).toString());
     window.location.href = url;
