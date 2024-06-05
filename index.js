@@ -247,19 +247,19 @@ document.addEventListener('keyup', e => {
     window.location.href = url;
   }
   //구약으로 이동
-  else if((keyName === 'o' || keyName === 'O') && pushedShiftKey){
+  else if((keyName === 'o' || keyName === 'O' || keyName === 'ㅐ' || keyName === 'ㅒ') && pushedShiftKey){
     params.set('bk', 1);
     params.set('ch', '1');
     window.location.href = url;
   }
   //신약으로 이동
-  else if((keyName === 'n' || keyName === 'N') && pushedShiftKey){
+  else if((keyName === 'n' || keyName === 'N' || keyName === 'ㅜ') && pushedShiftKey){
     params.set('bk', 40);
     params.set('ch', '1');
     window.location.href = url;
   }
   //장 이동
-  else if((keyName === 'g' || keyName === 'G') && pushedShiftKey){
+  else if((keyName === 'g' || keyName === 'G' || keyName === 'ㅎ') && pushedShiftKey){
     let request = prompt("입력한 장으로 이동");
     if(Number(request)<1 || Number(request)>numberOfChapter)  return;
     params.set('ch', request);
