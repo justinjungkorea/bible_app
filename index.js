@@ -261,7 +261,7 @@ document.addEventListener('keyup', e => {
   //장 이동
   else if((keyName === 'g' || keyName === 'G' || keyName === 'ㅎ') && pushedShiftKey){
     let request = prompt("입력한 장으로 이동");
-    if(Number(request)<1 || Number(request)>numberOfChapter)  return;
+    if(isNaN(request) || Number(request)<1 || Number(request)>numberOfChapter)  return;
     params.set('ch', request);
     window.location.href = url;
   }
