@@ -274,7 +274,7 @@ document.addEventListener('keyup', e => {
     if(similarBooks.length === 0)   return;
     let idx = bookNameArray.indexOf(similarBooks[0]);
     if(idx < 0) return;
-    params.set('bk', idx);
+    params.set('bk', idx+1);
     params.set('ch', 1);
     window.location.href = url;
   }
