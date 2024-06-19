@@ -43,7 +43,7 @@ let subBook;
 let numberOfChapter;
 let numberOfVerse;
 let bookName;
-let bookNameArray;
+let bookNameArray = [];
 
 let lsId = ('00' + book).slice(-2)+('000' + chapter).slice(-3);
 let isSaved = !!localStorage.getItem(lsId);
@@ -192,12 +192,12 @@ fetch('book_info.json')
   .then(async data => {
     loadingBox.style.display = 'block'
     mainPage.style.display = 'none'
-    bookNameArray = values(data);
     for(let bookName in data){
       let elem_option = document.createElement('option');
       elem_option.id = 'bk_' + bookName;
       elem_option.value = bookName;
       elem_option.innerText = data[bookName];
+      bookNameArray.push(data[bookName]);
 
       //책이 선택 된 경우
       if(book === bookName) {
