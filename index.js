@@ -43,6 +43,7 @@ let subBook;
 let numberOfChapter;
 let numberOfVerse;
 let bookName;
+let bookNameArray;
 
 let lsId = ('00' + book).slice(-2)+('000' + chapter).slice(-3);
 let isSaved = !!localStorage.getItem(lsId);
@@ -191,6 +192,7 @@ fetch('book_info.json')
   .then(async data => {
     loadingBox.style.display = 'block'
     mainPage.style.display = 'none'
+    bookNameArray = values(data);
     for(let bookName in data){
       let elem_option = document.createElement('option');
       elem_option.id = 'bk_' + bookName;
@@ -219,7 +221,7 @@ document.addEventListener('keydown', e => {
 //키보드 이벤트
 document.addEventListener('keyup', e => {
   const keyName = e.key;
-  console.log('keyname : ', keyName);
+
   //이전 장으로 이동
   if(keyName === 'ArrowLeft' && !pushedShiftKey){
     if(Number(chapter)<=1 || !pageLoaded)  return;
@@ -263,6 +265,17 @@ document.addEventListener('keyup', e => {
     let request = prompt("입력한 장으로 이동");
     if(isNaN(request) || Number(request)<1 || Number(request)>numberOfChapter)  return;
     params.set('ch', request);
+    window.location.href = url;
+  }
+  //책 이동
+  else if((keyName === 'b' || keyName === 'B' || keyName === 'ㅠ') && pushedShiftKey){
+    let request = prompt("입력한 책으로 이동");
+    let similarBooks = bookNameArray.filter(item => item.includes(request));
+    if(similarBooks.length === 0)   return;
+    let idx = bookNameArray.indexOf(similarBooks[0]);
+    if(idx < 0) return;
+    params.set('bk', idx);
+    params.set('ch', 1);
     window.location.href = url;
   }
   else if(keyName === 'Shift'){
