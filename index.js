@@ -9,22 +9,24 @@ let wordsBox = document.getElementById('wordsBox');
 let preChapterBtn = document.getElementById('preChapterBtn');
 let nextChapterBtn = document.getElementById('nextChapterBtn');
 let chapterLabel = document.getElementById('chapterLabel');
-// let copyAll = document.getElementById('copyAll');
 let loadingBox = document.getElementById('loadingBox');
 let mainPage = document.getElementById('mainPage');
 
 let pageLoaded = false;
 let pushedShiftKey = false;
 
+// book_info.json 데이터를 전역에서 공유하기 위한 객체
+let bookInfoData = {};
+
 const resetPage = () => {
-  params.set('mv', 'kjv_ko');
-  params.set('sv', null);
-  params.set('bk', null);
-  params.set('ch', null);
+  params.set('mv', 'kjv_ko'); // 기본 버전을 ko_new로 변경
+  params.set('sv', 'null');
+  params.set('bk', '1');
+  params.set('ch', '1');
   window.location.href = url;
 }
 
-if(!params.get('mv')){
+if(!params.get('mv') || !params.get('bk') || !params.get('ch')){
   resetPage()
 }
 
@@ -33,8 +35,10 @@ let subVersion = params.get('sv');
 let book = params.get('bk');
 let chapter = params.get('ch');
 
-document.getElementById('mv_' + mainVersion).selected = true;
-if(subVersion !== 'null'){
+if(document.getElementById('mv_' + mainVersion)) {
+  document.getElementById('mv_' + mainVersion).selected = true;
+}
+if(subVersion !== 'null' && document.getElementById('sv_' + subVersion)){
   document.getElementById('sv_' + subVersion).selected = true;
 }
 
@@ -52,7 +56,6 @@ let verseCopy = {};
 
 //구절 선택 이벤트
 const selectVerse = async id => {
-  //선택된 구절 스타일 변경
   let selectedVerse = document.getElementById(id);
   if (selectedVerse.style.color === "black") {
     selectedVerse.style.color = "#003399";
@@ -69,7 +72,6 @@ const selectVerse = async id => {
 
   localStorage.setItem(lsId, JSON.stringify(verseMemo));
 
-  //선택된 구절 클립보드에 복사
   let str = '';
   for(let i=1;i<=numberOfVerse;++i){
     if(verseCopy[i]){
@@ -79,29 +81,36 @@ const selectVerse = async id => {
 
   str = str + bookName + ' ' + chapter + '장';
   await navigator.clipboard.writeText(str);
-
 }
 
 const getBook = (bookNumber, chapterNumber) => {
   return new Promise(resolve => {
-    fetch(mainVersion + '.json')
+    // bible/[버전명]/[책번호].json 형태로 비동기 호출
+    fetch(`bible/${mainVersion}/${bookNumber}.json`)
       .then(result => {
         result.json()
           .then(async r => {
-            bookName = r[bookNumber-1].book_name;
-            numberOfChapter = r[bookNumber-1].book.length;
+            // 외부 book_info.json에서 매핑된 책 이름을 할당
+            bookName = bookInfoData[bookNumber];
+            // 해당 책의 JSON 오브젝트가 가진 최상위 키 개수가 총 장 수가 됨
+            numberOfChapter = Object.keys(r).length;
+            
             await chapterUpdate();
-            mainBook = JSON.parse(JSON.stringify(r[bookNumber-1].book[chapterNumber-1][chapterNumber]));
+            
+            // 데이터 포맷 변화에 따라 해당 장 객체를 바로 참조
+            mainBook = r[chapterNumber];
             numberOfVerse = Object.keys(mainBook).length;
 
+            // 새로운 장 로드 시 기존 화면 초기화
+            wordsBox.innerHTML = '';
+
             //대역이 없는 경우
-            if(subVersion === 'null') {
+            if(subVersion === 'null' || !subVersion) {
               for(let i=1;i<=numberOfVerse;++i){
                 let verseP = document.createElement('p');
                 let verseSpan = document.createElement('span');
                 verseSpan.id = i;
 
-                //메모가 된 경우 반영
                 if(verseMemo[verseSpan.id]){
                   verseSpan.style.backgroundColor = '#FAFAD2'
                   verseSpan.style.color = 'black';
@@ -122,18 +131,17 @@ const getBook = (bookNumber, chapterNumber) => {
             }
             //대역이 있는 경우
             else {
-              fetch(subVersion + '.json')
+              fetch(`bible/${subVersion}/${bookNumber}.json`)
                 .then(result => {
                   result.json()
-                    .then(async r => {
-                      subBook = JSON.parse(JSON.stringify(r[bookNumber - 1].book[chapterNumber - 1][chapterNumber]));
+                    .then(async rSub => {
+                      subBook = rSub[chapterNumber];
 
                       for(let i=1;i<=numberOfVerse;++i){
                         let verseP = document.createElement('p');
                         let verseSpan = document.createElement('span');
                         verseSpan.id = i;
 
-                        //메모가 된 경우 반영
                         if(verseMemo[verseSpan.id]){
                           verseSpan.style.backgroundColor = '#FAFAD2'
                           verseSpan.style.color = 'black';
@@ -151,19 +159,20 @@ const getBook = (bookNumber, chapterNumber) => {
                           await selectVerse(e.target.id);
                         }
                       }
-
                     })
                 })
             }
             chSelect.hidden = false;
             chapterLabel.hidden = false;
             chapterLabel.innerText = bookNumber === '19' ? '편':'장'
-            // copyAll.hidden = false;
 
             if(Number(chapter) > 1) preChapterBtn.hidden = false;
+            else preChapterBtn.hidden = true;
+            
             if(numberOfChapter !== Number(chapter)) nextChapterBtn.hidden = false;
+            else nextChapterBtn.hidden = true;
+            
             pageLoaded = true;
-
             resolve();
           })
       })
@@ -172,6 +181,7 @@ const getBook = (bookNumber, chapterNumber) => {
 
 const chapterUpdate = () => {
   return new Promise(resolve => {
+    chSelect.innerHTML = ''; // 장 변경 시 기존 option 태그 누적 현상 방지
     for(let i=1;i<=numberOfChapter;++i){
       let elem_option = document.createElement('option');
       elem_option.id = 'ch_'+i;
@@ -190,17 +200,18 @@ const chapterUpdate = () => {
 fetch('book_info.json')
   .then(result => { return result.json() })
   .then(async data => {
+    bookInfoData = data; // 로드한 매핑용 json 데이터를 전역 객체에 할당
     loadingBox.style.display = 'block'
     mainPage.style.display = 'none'
-    for(let bookName in data){
+    for(let bookKey in data){
       let elem_option = document.createElement('option');
-      elem_option.id = 'bk_' + bookName;
-      elem_option.value = bookName;
-      elem_option.innerText = data[bookName];
-      bookNameArray.push(data[bookName]);
+      elem_option.id = 'bk_' + bookKey;
+      elem_option.value = bookKey;
+      elem_option.innerText = data[bookKey];
+      bookNameArray.push(data[bookKey]);
 
       //책이 선택 된 경우
-      if(book === bookName) {
+      if(book === bookKey) {
         elem_option.selected = true
         await getBook(book, chapter)
       }
@@ -214,7 +225,6 @@ fetch('book_info.json')
 
 document.addEventListener('keydown', e => {
   const keyName = e.key;
-
   if(keyName == 'Shift')  pushedShiftKey = true;
 })
 
@@ -222,52 +232,44 @@ document.addEventListener('keydown', e => {
 document.addEventListener('keyup', e => {
   const keyName = e.key;
 
-  //이전 장으로 이동
   if(keyName === 'ArrowLeft' && !pushedShiftKey){
     if(Number(chapter)<=1 || !pageLoaded)  return;
     params.set('ch', (Number(chapter)-1).toString());
     window.location.href = url;
   }
-  //다음 장으로 이동
   else if(keyName === 'ArrowRight' && !pushedShiftKey){
     if(numberOfChapter <= Number(chapter) || !pageLoaded) return;
     params.set('ch', (Number(chapter)+1).toString());
     window.location.href = url;
   }
-  //이전 책으로 이동
   else if(keyName === 'ArrowLeft' && pushedShiftKey){
     if(book == 1 || !pageLoaded) return;
     params.set('bk', (Number(book)-1).toString());
     params.set('ch', '1');
     window.location.href = url;
   }
-  //다음 책으로 이동
   else if(keyName === 'ArrowRight' && pushedShiftKey){
     if(book == 66 || !pageLoaded) return;
     params.set('bk', (Number(book)+1).toString());
     params.set('ch', '1');
     window.location.href = url;
   }
-  //구약으로 이동
   else if((keyName === 'o' || keyName === 'O' || keyName === 'ㅐ' || keyName === 'ㅒ') && pushedShiftKey){
     params.set('bk', 1);
     params.set('ch', '1');
     window.location.href = url;
   }
-  //신약으로 이동
   else if((keyName === 'n' || keyName === 'N' || keyName === 'ㅜ') && pushedShiftKey){
     params.set('bk', 40);
     params.set('ch', '1');
     window.location.href = url;
   }
-  //장 이동
   else if((keyName === 'g' || keyName === 'G' || keyName === 'ㅎ') && pushedShiftKey){
     let request = prompt("입력한 장으로 이동");
     if(isNaN(request) || Number(request)<1 || Number(request)>numberOfChapter)  return;
     params.set('ch', request);
     window.location.href = url;
   }
-  //책 이동
   else if((keyName === 'b' || keyName === 'B' || keyName === 'ㅠ') && pushedShiftKey){
     let request = prompt("입력한 책으로 이동");
     let similarBooks = bookNameArray.filter(item => item.includes(request));
@@ -283,59 +285,40 @@ document.addEventListener('keyup', e => {
   }
 })
 
-//책 선택
 bookSelect.addEventListener('change', e => {
-  //초기화
   if(e.target.value === 'book') {
     resetPage();
     return;
   }
-
   book = e.target.value;
   params.set('bk', book);
   params.set('ch', '1');
   window.location.href = url;
 })
 
-//장 선택시
 chSelect.addEventListener('change', e => {
   params.set('ch', e.target.value);
   window.location.href = url;
 })
 
-//번역 선택 시
 mvSelect.addEventListener('change', e => {
   params.set('mv', e.target.value);
   window.location.href = url;
 })
 
-//대역 선택 시
 svSelect.addEventListener('change', e => {
   params.set('sv', e.target.value);
   window.location.href = url;
 })
 
-//이전 장으로 이동
 preChapterBtn.addEventListener('click', () => {
   params.set('ch', (Number(chapter)-1).toString());
   window.location.href = url;
 })
 
-//다음 장으로 이동
 nextChapterBtn.addEventListener('click', () => {
   params.set('ch', (Number(chapter)+1).toString());
   window.location.href = url;
 })
 
-//스크롤 위치
 history.scrollRestoration = "auto";
-
-// //전체 복사
-// copyAll.addEventListener('click', async () => {
-//   let str = bookName + ' ' + chapter + '장' + '\n';
-//   for(let i=1;i<=numberOfVerse;++i){
-//     str = str + i + ". " + mainBook[i] + '\n';
-//   }
-//   await navigator.clipboard.writeText(str);
-//   alert('done')
-// })
