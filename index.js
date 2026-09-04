@@ -13,7 +13,6 @@ let loadingBox = document.getElementById('loadingBox');
 let mainPage = document.getElementById('mainPage');
 
 let pageLoaded = false;
-let pushedShiftKey = false;
 
 // book_info.json 데이터를 전역에서 공유하기 위한 객체
 let bookInfoData = {};
@@ -222,55 +221,60 @@ fetch('book_info.json')
     mainPage.style.display = 'block'
   })
 
+//키보드 이벤트
 document.addEventListener('keydown', e => {
   const keyName = e.key;
-  if(keyName == 'Shift')  pushedShiftKey = true;
-})
+  const isShiftPressed = e.shiftKey;
 
-//키보드 이벤트
-document.addEventListener('keyup', e => {
-  const keyName = e.key;
-
-  if(keyName === 'ArrowLeft' && !pushedShiftKey){
+  if(keyName === 'ArrowLeft' && !isShiftPressed){
     if(Number(chapter)<=1 || !pageLoaded)  return;
+    e.preventDefault();
     params.set('ch', (Number(chapter)-1).toString());
     window.location.href = url;
   }
-  else if(keyName === 'ArrowRight' && !pushedShiftKey){
+  else if(keyName === 'ArrowRight' && !isShiftPressed){
     if(numberOfChapter <= Number(chapter) || !pageLoaded) return;
+    e.preventDefault();
     params.set('ch', (Number(chapter)+1).toString());
     window.location.href = url;
   }
-  else if(keyName === 'ArrowLeft' && pushedShiftKey){
+  else if(keyName === 'ArrowLeft' && isShiftPressed){
     if(book == 1 || !pageLoaded) return;
+    e.preventDefault();
     params.set('bk', (Number(book)-1).toString());
     params.set('ch', '1');
     window.location.href = url;
   }
-  else if(keyName === 'ArrowRight' && pushedShiftKey){
+  else if(keyName === 'ArrowRight' && isShiftPressed){
     if(book == 66 || !pageLoaded) return;
+    e.preventDefault();
     params.set('bk', (Number(book)+1).toString());
     params.set('ch', '1');
     window.location.href = url;
   }
-  else if((keyName === 'o' || keyName === 'O' || keyName === 'ㅐ' || keyName === 'ㅒ') && pushedShiftKey){
+  else if((keyName === 'o' || keyName === 'O' || keyName === 'ㅐ' || keyName === 'ㅒ') && isShiftPressed){
+    e.preventDefault();
     params.set('bk', 1);
     params.set('ch', '1');
     window.location.href = url;
   }
-  else if((keyName === 'n' || keyName === 'N' || keyName === 'ㅜ') && pushedShiftKey){
+  else if((keyName === 'n' || keyName === 'N' || keyName === 'ㅜ') && isShiftPressed){
+    e.preventDefault();
     params.set('bk', 40);
     params.set('ch', '1');
     window.location.href = url;
   }
-  else if((keyName === 'g' || keyName === 'G' || keyName === 'ㅎ') && pushedShiftKey){
+  else if((keyName === 'g' || keyName === 'G' || keyName === 'ㅎ') && isShiftPressed){
+    e.preventDefault();
     let request = prompt("입력한 장으로 이동");
-    if(isNaN(request) || Number(request)<1 || Number(request)>numberOfChapter)  return;
+    if(request === null || isNaN(request) || Number(request)<1 || Number(request)>numberOfChapter)  return;
     params.set('ch', request);
     window.location.href = url;
   }
-  else if((keyName === 'b' || keyName === 'B' || keyName === 'ㅠ') && pushedShiftKey){
+  else if((keyName === 'b' || keyName === 'B' || keyName === 'ㅠ') && isShiftPressed){
+    e.preventDefault();
     let request = prompt("입력한 책으로 이동");
+    if(!request) return;
     let similarBooks = bookNameArray.filter(item => item.includes(request));
     if(similarBooks.length === 0)   return;
     let idx = bookNameArray.indexOf(similarBooks[0]);
@@ -278,9 +282,6 @@ document.addEventListener('keyup', e => {
     params.set('bk', idx+1);
     params.set('ch', 1);
     window.location.href = url;
-  }
-  else if(keyName === 'Shift'){
-    pushedShiftKey = false;
   }
 })
 
