@@ -11,6 +11,11 @@ let nextChapterBtn = document.getElementById('nextChapterBtn');
 let chapterLabel = document.getElementById('chapterLabel');
 let loadingBox = document.getElementById('loadingBox');
 let mainPage = document.getElementById('mainPage');
+let shortcutModal = document.getElementById('shortcutModal');
+let shortcutLabel = document.getElementById('shortcutLabel');
+let shortcutInput = document.getElementById('shortcutInput');
+let shortcutCancelBtn = document.getElementById('shortcutCancelBtn');
+let shortcutSubmitBtn = document.getElementById('shortcutSubmitBtn');
 
 let pageLoaded = false;
 
@@ -232,6 +237,58 @@ fetch('book_info.json')
     })
   })
 
+let shortcutMode = null;
+
+const closeShortcutModal = () => {
+  shortcutModal.hidden = true;
+  shortcutMode = null;
+  shortcutInput.value = '';
+  document.body.focus({ preventScroll: true });
+}
+
+const submitShortcutModal = () => {
+  const request = shortcutInput.value.trim();
+
+  if(shortcutMode === 'chapter'){
+    if(isNaN(request) || Number(request)<1 || Number(request)>numberOfChapter) return;
+    params.set('ch', request);
+    window.location.href = url;
+  }
+  else if(shortcutMode === 'book'){
+    if(!request) return;
+    let similarBooks = bookNameArray.filter(item => item.includes(request));
+    if(similarBooks.length === 0) return;
+    let idx = bookNameArray.indexOf(similarBooks[0]);
+    if(idx < 0) return;
+    params.set('bk', idx+1);
+    params.set('ch', 1);
+    window.location.href = url;
+  }
+}
+
+const openShortcutModal = (mode) => {
+  shortcutMode = mode;
+  shortcutLabel.innerText = mode === 'chapter' ? '입력한 장으로 이동' : '입력한 책으로 이동';
+  shortcutInput.value = '';
+  shortcutInput.inputMode = mode === 'chapter' ? 'numeric' : 'text';
+  shortcutModal.hidden = false;
+  requestAnimationFrame(() => shortcutInput.focus());
+}
+
+shortcutCancelBtn.addEventListener('click', closeShortcutModal);
+shortcutSubmitBtn.addEventListener('click', submitShortcutModal);
+
+shortcutInput.addEventListener('keydown', e => {
+  if(e.key === 'Enter'){
+    e.preventDefault();
+    submitShortcutModal();
+  }
+  else if(e.key === 'Escape'){
+    e.preventDefault();
+    closeShortcutModal();
+  }
+});
+
 //키보드 이벤트
 document.addEventListener('keydown', e => {
   console.log('[keydown]', {
@@ -247,6 +304,7 @@ document.addEventListener('keydown', e => {
   });
   const keyName = e.key;
   const isShiftPressed = e.shiftKey;
+  if(shortcutModal && !shortcutModal.hidden) return;
 
   if(keyName === 'ArrowLeft' && !isShiftPressed){
     if(Number(chapter)<=1 || !pageLoaded)  return;
@@ -288,22 +346,11 @@ document.addEventListener('keydown', e => {
   }
   else if((keyName === 'g' || keyName === 'G' || keyName === 'ㅎ') && isShiftPressed){
     e.preventDefault();
-    let request = prompt("입력한 장으로 이동");
-    if(request === null || isNaN(request) || Number(request)<1 || Number(request)>numberOfChapter)  return;
-    params.set('ch', request);
-    window.location.href = url;
+    openShortcutModal('chapter');
   }
   else if((keyName === 'b' || keyName === 'B' || keyName === 'ㅠ') && isShiftPressed){
     e.preventDefault();
-    let request = prompt("입력한 책으로 이동");
-    if(!request) return;
-    let similarBooks = bookNameArray.filter(item => item.includes(request));
-    if(similarBooks.length === 0)   return;
-    let idx = bookNameArray.indexOf(similarBooks[0]);
-    if(idx < 0) return;
-    params.set('bk', idx+1);
-    params.set('ch', 1);
-    window.location.href = url;
+    openShortcutModal('book');
   }
 })
 
