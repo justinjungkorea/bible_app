@@ -219,11 +219,32 @@ fetch('book_info.json')
     }
     loadingBox.style.display = 'none'
     mainPage.style.display = 'block'
+    console.log('[after load before focus]', {
+      activeElement: document.activeElement,
+      activeTag: document.activeElement?.tagName,
+      activeId: document.activeElement?.id
+    })
     document.body.focus({ preventScroll: true })
+    console.log('[after body focus]', {
+      activeElement: document.activeElement,
+      activeTag: document.activeElement?.tagName,
+      activeId: document.activeElement?.id
+    })
   })
 
 //키보드 이벤트
 document.addEventListener('keydown', e => {
+  console.log('[keydown]', {
+    key: e.key,
+    code: e.code,
+    shiftKey: e.shiftKey,
+    activeElement: document.activeElement,
+    activeTag: document.activeElement?.tagName,
+    activeId: document.activeElement?.id,
+    target: e.target,
+    targetTag: e.target?.tagName,
+    targetId: e.target?.id
+  });
   const keyName = e.key;
   const isShiftPressed = e.shiftKey;
 
