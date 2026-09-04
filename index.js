@@ -220,7 +220,6 @@ fetch('book_info.json')
     }
     loadingBox.style.display = 'none'
     mainPage.style.display = 'block'
-    wordsBox.focus()
   })
 
 document.addEventListener('keydown', e => {
