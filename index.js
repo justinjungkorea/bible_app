@@ -219,6 +219,7 @@ fetch('book_info.json')
     }
     loadingBox.style.display = 'none'
     mainPage.style.display = 'block'
+    document.body.focus({ preventScroll: true })
   })
 
 //키보드 이벤트
