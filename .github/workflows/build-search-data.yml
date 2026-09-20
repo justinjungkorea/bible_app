@@ -6,6 +6,7 @@ on:
       - gh-pages
     paths:
       - 'scripts/build-search-data.js'
+      - '.github/workflows/build-search-data.yml'
 
 permissions:
   contents: write
