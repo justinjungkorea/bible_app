@@ -16,6 +16,15 @@ let shortcutLabel = document.getElementById('shortcutLabel');
 let shortcutInput = document.getElementById('shortcutInput');
 let shortcutCancelBtn = document.getElementById('shortcutCancelBtn');
 let shortcutSubmitBtn = document.getElementById('shortcutSubmitBtn');
+let searchBtn = document.getElementById('searchBtn');
+let searchModal = document.getElementById('searchModal');
+let searchCloseBtn = document.getElementById('searchCloseBtn');
+let searchForm = document.getElementById('searchForm');
+let searchInput = document.getElementById('searchInput');
+let searchStatus = document.getElementById('searchStatus');
+let searchResults = document.getElementById('searchResults');
+
+let searchDataCache = {};
 
 let pageLoaded = false;
 
@@ -57,6 +66,19 @@ let lsId = ('00' + book).slice(-2)+('000' + chapter).slice(-3);
 let isSaved = !!localStorage.getItem(lsId);
 let verseMemo = isSaved ? JSON.parse(localStorage.getItem(lsId)) : {};
 let verseCopy = {};
+
+const scrollToRequestedVerse = () => {
+  const verse = params.get('v');
+  if(!verse) return;
+  const target = document.getElementById(verse);
+  if(!target) return;
+
+  target.scrollIntoView({ block: 'center' });
+  target.classList.add('search-target-verse');
+  setTimeout(() => target.classList.remove('search-target-verse'), 2000);
+  params.delete('v');
+  history.replaceState(null, '', url);
+}
 
 //구절 선택 이벤트
 const selectVerse = async id => {
@@ -132,6 +154,7 @@ const getBook = (bookNumber, chapterNumber) => {
                   await selectVerse(e.target.id);
                 }
               }
+              scrollToRequestedVerse();
             }
             //대역이 있는 경우
             else {
@@ -163,6 +186,7 @@ const getBook = (bookNumber, chapterNumber) => {
                           await selectVerse(e.target.id);
                         }
                       }
+                      scrollToRequestedVerse();
                     })
                 })
             }
@@ -237,6 +261,112 @@ fetch('book_info.json')
     })
   })
 
+const closeSearchModal = () => {
+  searchModal.hidden = true;
+  document.body.focus({ preventScroll: true });
+}
+
+const openSearchModal = () => {
+  searchModal.hidden = false;
+  requestAnimationFrame(() => searchInput.focus());
+}
+
+const renderSearchResults = results => {
+  searchResults.innerHTML = '';
+
+  if(results.length === 0){
+    searchStatus.textContent = '검색 결과가 없습니다.';
+    return;
+  }
+
+  searchStatus.textContent = `${results.length.toLocaleString()}개의 구절을 찾았습니다.`;
+
+  const fragment = document.createDocumentFragment();
+  results.forEach(result => {
+    const item = document.createElement('button');
+    item.type = 'button';
+    item.className = 'search-result-item';
+
+    const reference = document.createElement('strong');
+    reference.className = 'search-result-reference';
+    reference.textContent = `${bookInfoData[result.book]} ${result.chapter}:${result.verse}`;
+
+    const text = document.createElement('span');
+    text.className = 'search-result-text';
+    text.textContent = result.text;
+
+    item.appendChild(reference);
+    item.appendChild(text);
+    item.addEventListener('click', () => {
+      params.set('bk', result.book);
+      params.set('ch', result.chapter);
+      params.set('v', result.verse);
+      window.location.href = url;
+    });
+
+    fragment.appendChild(item);
+  });
+
+  searchResults.appendChild(fragment);
+}
+
+const searchBible = async keyword => {
+  const query = keyword.trim();
+  if(!query) return;
+
+  searchStatus.textContent = '검색 중...';
+  searchResults.innerHTML = '';
+
+  try {
+    if(!searchDataCache[mainVersion]){
+      const response = await fetch(`bible/search/${mainVersion}.json`);
+      if(!response.ok) throw new Error('검색 데이터를 불러오지 못했습니다.');
+      searchDataCache[mainVersion] = await response.json();
+    }
+
+    const bible = searchDataCache[mainVersion];
+    const normalizedQuery = query.toLocaleLowerCase();
+    const results = [];
+
+    for(const [bookNumber, chapters] of Object.entries(bible)){
+      for(const [chapterNumber, verses] of Object.entries(chapters)){
+        for(const [verseNumber, verseText] of Object.entries(verses)){
+          if(String(verseText).toLocaleLowerCase().includes(normalizedQuery)){
+            results.push({
+              book: bookNumber,
+              chapter: chapterNumber,
+              verse: verseNumber,
+              text: verseText
+            });
+          }
+        }
+      }
+    }
+
+    renderSearchResults(results);
+  }
+  catch(error){
+    console.error(error);
+    searchStatus.textContent = '검색 데이터를 불러오는 중 오류가 발생했습니다.';
+  }
+}
+
+searchBtn.addEventListener('click', openSearchModal);
+searchCloseBtn.addEventListener('click', closeSearchModal);
+searchModal.addEventListener('click', e => {
+  if(e.target === searchModal) closeSearchModal();
+});
+searchForm.addEventListener('submit', e => {
+  e.preventDefault();
+  searchBible(searchInput.value);
+});
+searchInput.addEventListener('keydown', e => {
+  if(e.key === 'Escape'){
+    e.preventDefault();
+    closeSearchModal();
+  }
+});
+
 let shortcutMode = null;
 
 const closeShortcutModal = () => {
@@ -304,9 +434,20 @@ document.addEventListener('keydown', e => {
   });
   const keyName = e.key;
   const isShiftPressed = e.shiftKey;
+  if(searchModal && !searchModal.hidden){
+    if(e.key === 'Escape'){
+      e.preventDefault();
+      closeSearchModal();
+    }
+    return;
+  }
   if(shortcutModal && !shortcutModal.hidden) return;
 
-  if(keyName === 'ArrowLeft' && !isShiftPressed){
+  if((keyName === 'f' || keyName === 'F' || keyName === 'ㄹ') && isShiftPressed){
+    e.preventDefault();
+    openSearchModal();
+  }
+  else if(keyName === 'ArrowLeft' && !isShiftPressed){
     if(Number(chapter)<=1 || !pageLoaded)  return;
     e.preventDefault();
     params.set('ch', (Number(chapter)-1).toString());
