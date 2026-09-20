@@ -41,6 +41,7 @@
             <option value='ko_new' id="mv_ko_new">개역개정</option>
             <option value='kjv' id="mv_kjv">KJV</option>
         </select>
+        <button id="searchBtn" class="search-icon-btn" type="button" aria-label="성경 찾기" title="찾기 (Shift+F)">⌕</button>
         <select name='subVersion' id='subVersion'>
             <option value='null' id="sv_none" selected>대역</option>
             <option value='kjv_ko' id="sv_kjv_ko">흠정역</option>
@@ -55,6 +56,20 @@
     <div id="navigator">
         <button id="preChapterBtn" hidden>이전장</button>
         <button id="nextChapterBtn" hidden>다음장</button>
+    </div>
+</div>
+<div id="searchModal" class="search-modal" hidden>
+    <div class="search-dialog">
+        <div class="search-header">
+            <strong>성경 찾기</strong>
+            <button id="searchCloseBtn" class="search-close-btn" type="button" aria-label="닫기">×</button>
+        </div>
+        <form id="searchForm" class="search-form">
+            <input id="searchInput" type="search" autocomplete="off" placeholder="검색어를 입력하세요">
+            <button id="searchSubmitBtn" type="submit">찾기</button>
+        </form>
+        <div id="searchStatus" class="search-status"></div>
+        <div id="searchResults" class="search-results"></div>
     </div>
 </div>
 <div id="shortcutModal" class="shortcut-modal" hidden>
