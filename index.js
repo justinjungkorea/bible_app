@@ -325,13 +325,17 @@ const searchBible = async keyword => {
     }
 
     const bible = searchDataCache[mainVersion];
-    const normalizedQuery = query.toLocaleLowerCase();
+    const keywords = query
+      .toLocaleLowerCase()
+      .split(/\s+/)
+      .filter(Boolean);
     const results = [];
 
     for(const [bookNumber, chapters] of Object.entries(bible)){
       for(const [chapterNumber, verses] of Object.entries(chapters)){
         for(const [verseNumber, verseText] of Object.entries(verses)){
-          if(String(verseText).toLocaleLowerCase().includes(normalizedQuery)){
+          const normalizedVerse = String(verseText).toLocaleLowerCase();
+          if(keywords.every(keyword => normalizedVerse.includes(keyword))){
             results.push({
               book: bookNumber,
               chapter: chapterNumber,
